@@ -1,6 +1,8 @@
+import java.awt.Component;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.lang.reflect.AnnotatedElement;
+import java.util.ArrayList;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -23,11 +25,17 @@ public class Snake {
 	//GUI Object Declarations
 	JFrame frame = new JFrame();
 	JPanel pane = new JPanel();
+	Component comList[][] = new Component[20][20];
 	
 
 	Snake() {
 		
 		//GUI set up ---------------------------------------------------------------------
+		
+		
+		
+		
+		
 		// add it all up
 		frame.add(pane);
 
@@ -39,7 +47,7 @@ public class Snake {
 		});
 		
 		// frame settings
-		frame.setTitle("Snake "+"");
+		frame.setTitle("Snake "/* PUT VERSION STUFF HERE*/);
 		
 		frame.setSize(610, 450);
 		frame.setResizable(false);
