@@ -7,8 +7,8 @@ import java.awt.Point;
  *		}
  */
 public class SnakeObject {
-	Direction direction;
-	Point point;
+	private Direction direction;
+	private Point point;
 	/**
 	 * 
 	 * @param Point
@@ -23,9 +23,11 @@ public class SnakeObject {
 	 * @param SnakeObject
 	 */
 	SnakeObject(SnakeObject other){
-		this.point= new Point(other.getPoint().x-other.direction(), other.getPoint().y-other.direction());//Subtracts direction to extend the snake
+		this.point= new Point(other.getPoint().x-((other.getDirection()==Direction.EAST||other.getDirection()==Direction.WEST )? other.direction():0), other.getPoint().y-((other.getDirection()==Direction.NORTH||other.getDirection()==Direction.SOUTH )? other.direction():0));//Subtracts direction to extend the snake
 		this.direction=other.getDirection();
 	}
+	
+	
 	/**
 	 * direction()
 	 * returns the int value of the enum Direction
@@ -61,6 +63,14 @@ public class SnakeObject {
 	}
 	public void setDirection(Direction direction) {
 		this.direction = direction;
+	}
+	public void forward(){
+		this.point.move(this.point.x+((this.direction==Direction.EAST||this.direction==Direction.WEST )? this.direction():0), 
+				this.point.y+((this.direction==Direction.EAST||this.direction==Direction.WEST )? this.direction():0));
+		System.out.println("Forward");
+		System.out.println(point);
+		System.out.println(this.direction);
+		System.out.println(this.direction());
 	}
 	
 	
