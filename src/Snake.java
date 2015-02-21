@@ -4,14 +4,20 @@ import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.Point;
+import java.awt.event.ActionEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 import java.util.Date;
 
+import javax.swing.AbstractAction;
 import javax.swing.JButton;
+import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.KeyStroke;
+
+import com.sun.glass.events.KeyEvent;
 
 /**
  * @author( name= "Max Niebergall" date= "Febuary 19th 2015" )
@@ -48,6 +54,56 @@ public class Snake {
 			}
 		}
 
+		// HERE ARE THE KEY BINDINGS
+		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke(KeyEvent.VK_W, 0), "forward");
+		pane.getActionMap().put("forward", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Forward");
+
+				for (SnakeObject snk : snake) {
+					snk.setDirection(Direction.NORTH);
+				}
+
+			}
+		});
+		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke(KeyEvent.VK_A, 0), "left");
+		pane.getActionMap().put("left", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Left");
+				for (SnakeObject snk : snake) {
+					snk.setDirection(Direction.WEST);
+				}
+
+			}
+		});
+		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke(KeyEvent.VK_D, 0), "right");
+		pane.getActionMap().put("right", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Right");
+				for (SnakeObject snk : snake) {
+					snk.setDirection(Direction.EAST);
+				}
+			}
+		});
+		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke(KeyEvent.VK_S, 0), "down");
+		pane.getActionMap().put("down", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Down");
+				for (SnakeObject snk : snake) {
+					snk.setDirection(Direction.SOUTH);
+				}
+			}
+		});
+		// END OF KEY BINDINGS
+
 		// add it all up
 		for (int x = 0; x < comList.length; x++) {
 			for (int y = 0; y < comList[x].length; y++) {
@@ -76,7 +132,7 @@ public class Snake {
 		// ---------------------------------------------------------------------
 
 		// Infinite loop to update board state
-		//----------------------------------------------------------------------
+		// ----------------------------------------------------------------------
 		while (true) {
 			System.out.println("While True");
 			long startTime = System.currentTimeMillis();
@@ -89,7 +145,7 @@ public class Snake {
 			}
 		}
 		// End infinite loop to update board state
-		//----------------------------------------------------------------------
+		// ----------------------------------------------------------------------
 	}
 
 	private void extendSnake() {
@@ -115,13 +171,13 @@ public class Snake {
 	// Attempt Use of additional thread
 
 	private void refresh() {
-		//Update Snake
-		for(SnakeObject snk : snake){
+		// Update Snake
+		for (SnakeObject snk : snake) {
 			System.out.println("Snk forward");
 			snk.forward();
 		}
-		
-		//Update GUI
+
+		// Update GUI
 		updateComList();
 		frame.validate();
 		frame.repaint();
