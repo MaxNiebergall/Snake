@@ -141,7 +141,7 @@ public class Snake {
 		});
 
 		// frame settings
-		frame.setTitle("Snake v0.1.0 Beta"/* TODO PUT VERSION STUFF HERE */);
+		frame.setTitle("Max Nieberall's Snake v0.1.0 Beta"/* TODO PUT VERSION STUFF HERE */);
 
 		frame.setSize(750, 700);
 		frame.setResizable(true);
