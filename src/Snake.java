@@ -43,7 +43,7 @@ public class Snake {
 		comList[x][y].setMaximumSize(new Dimension(10, 10));
 	    }
 	}
-	
+
 	reset(true);
 
 	// HERE ARE THE KEY BINDINGS
@@ -166,7 +166,7 @@ public class Snake {
 
 	    System.out.println("Snk forward");
 	    snk.forward();
-	    
+
 	    System.out.println(" SnkPoint: " + snk.getPoint() + " SnakePoint: " + snake.get(0).getPoint());// TODO Delete this line when the problem is resolved
 	    System.out.println(snk != snake.get(0) && (snake.get(0).getPoint().equals(snk.getPoint()) || (snk.getPoint().x < 0 || snk.getPoint().x >= comList.length || snk.getPoint().y < 0 || snk.getPoint().y >= comList[0].length)));
 	    if ((snk != snake.get(0) && snake.get(0).getPoint().equals(snk.getPoint())) || (snk.getPoint().x < 0 || snk.getPoint().x >= comList.length || snk.getPoint().y < 0 || snk.getPoint().y >= comList[0].length)) {
@@ -186,7 +186,7 @@ public class Snake {
 	updateComList();
 	frame.validate();
 	frame.repaint();
-	
+
 	return true;
     }
 
@@ -194,7 +194,7 @@ public class Snake {
 	int option = JOptionPane.showConfirmDialog(pane, "You Lose :-(\nwould you like to play again?");
 	if (option == JOptionPane.YES_OPTION) {
 	    reset(false);
-	    
+
 	} else {
 	    System.exit(0);
 	}
@@ -207,29 +207,48 @@ public class Snake {
 	extendSnake();
 	extendSnake();
 
-	if(!first) infiniteRefresh();
-	
+	if (!first)
+	    infiniteRefresh();
+
 	// End restarting the board state
     }
-    
-    private void infiniteRefresh(){
+
+    private void infiniteRefresh() {
 
 	// Infinite loop to update board state
 	// ----------------------------------------------------------------------
 	boolean refresh;
-	do{
+	do {
 	    System.out.println("While True");
 	    long startTime = System.currentTimeMillis();
-	    refresh=refresh();
+	    refresh = refresh();
 	    long endTime = System.currentTimeMillis(); // 166 milliseconds is 1/60 seconds, or 60Hz
 	    try {
-		Thread.sleep((166 - (endTime - startTime)>0)?166 - (endTime - startTime):0);
+		Thread.sleep((166 - (endTime - startTime) > 0) ? 166 - (endTime - startTime) : 0);
 	    } catch (InterruptedException e1) {
 		e1.printStackTrace();
 	    }
-	}while(refresh);
+	} while (refresh);
 	// End infinite loop to update board state
 	// ----------------------------------------------------------------------
+    }
+
+    /**
+     * placeFood()
+     * changes the background of an element of comList to green to represent a food
+     * the element selected is a random integer between 0 and (comList.length * comList[0].length)
+     */
+    private void placeFood() {
+	int x = 0, y = 0, count = 0;
+	for (x = 0, count = (int) (Math.random() * (comList.length * comList[0].length)); count > 0; x++)
+	    if (x == 20)
+		x = 0;
+	    else
+		for (y = 0; y < 20; y++)
+		    if (comList[x][y].getBackground() == Color.WHITE)
+			count--;
+	comList[x][y].setBackground(Color.GREEN);
+
     }
 
 }
