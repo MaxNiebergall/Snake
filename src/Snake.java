@@ -14,6 +14,7 @@ import javax.swing.AbstractAction;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
@@ -56,16 +57,12 @@ public class Snake {
 
 		// HERE ARE THE KEY BINDINGS
 		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
-				KeyStroke.getKeyStroke(KeyEvent.VK_W, 0), "forward");
-		pane.getActionMap().put("forward", new AbstractAction() {
+				KeyStroke.getKeyStroke(KeyEvent.VK_W, 0), "up");
+		pane.getActionMap().put("up", new AbstractAction() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Forward");
-
-				for (SnakeObject snk : snake) {
-					snk.setDirection(Direction.NORTH);
-				}
-
+				System.out.println("Up");
+					snake.get(0).setDirection(Direction.NORTH);
 			}
 		});
 		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
@@ -74,10 +71,7 @@ public class Snake {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Left");
-				for (SnakeObject snk : snake) {
-					snk.setDirection(Direction.WEST);
-				}
-
+					snake.get(0).setDirection(Direction.WEST);
 			}
 		});
 		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
@@ -86,9 +80,7 @@ public class Snake {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Right");
-				for (SnakeObject snk : snake) {
-					snk.setDirection(Direction.EAST);
-				}
+					snake.get(0).setDirection(Direction.EAST);
 			}
 		});
 		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
@@ -97,9 +89,42 @@ public class Snake {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Down");
-				for (SnakeObject snk : snake) {
-					snk.setDirection(Direction.SOUTH);
-				}
+					snake.get(0).setDirection(Direction.SOUTH);
+			}
+		});pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke("UP"), "UP");
+		pane.getActionMap().put("UP", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Up-arrow");
+					snake.get(0).setDirection(Direction.NORTH);
+			}
+		});
+		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke("LEFT"), "LEFT");
+		pane.getActionMap().put("LEFT", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Left-arrow");
+					snake.get(0).setDirection(Direction.WEST);
+			}
+		});
+		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke("RIGHT"), "RIGHT");
+		pane.getActionMap().put("RIGHT", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Right-arrow");
+					snake.get(0).setDirection(Direction.EAST);
+			}
+		});
+		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(
+				KeyStroke.getKeyStroke("DOWN"), "DOWN");
+		pane.getActionMap().put("DOWN", new AbstractAction() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Down-arrow");
+					snake.get(0).setDirection(Direction.SOUTH);
 			}
 		});
 		// END OF KEY BINDINGS
@@ -139,7 +164,7 @@ public class Snake {
 			refresh();
 			long endTime = System.currentTimeMillis();
 			try {
-				Thread.sleep(166 - (endTime - startTime));
+				Thread.sleep(166 - (endTime - startTime)); //166 milliseconds is 1/60 seconds, or 60Hz
 			} catch (InterruptedException e1) {
 				e1.printStackTrace();
 			}
@@ -165,22 +190,69 @@ public class Snake {
 		}
 	}
 
-	// TODO Implement refresh method
-	// Use timer to find the time taken by each refresh and run the next one
-	// once the timer reaches 1/60 seconds (60Hz)
-	// Attempt Use of additional thread
-
 	private void refresh() {
 		// Update Snake
+		Direction dir0=snake.get(0).getDirection(), dir1;
 		for (SnakeObject snk : snake) {
+			for(SnakeObject innerSnk : snake){
+				if(snk!=innerSnk)System.out.println(" SnkPoint: "+snk.getPoint()+" innerSnkPoint: "+ innerSnk.getPoint());//TODO Delete this line when the problem is resolved
+				if(snk!=innerSnk && (snk.getPoint()==innerSnk.getPoint()||(snk.getPoint().x<0||snk.getPoint().x>=comList.length||snk.getPoint().y<0||snk.getPoint().y>=comList[0].length))){
+					
+					youLose();
+					return;
+				}
+			}
+			
 			System.out.println("Snk forward");
 			snk.forward();
+		
+			dir1=snk.getDirection();
+			snk.setDirection(dir0);
+			dir0=dir1;
+			
 		}
 
 		// Update GUI
 		updateComList();
 		frame.validate();
 		frame.repaint();
+	}
+	
+	private void youLose(){
+		int option =JOptionPane.showConfirmDialog(pane, "You Lose :-(\nwould you like to play again?");
+		if(option==JOptionPane.YES_OPTION){
+			// Restart the board state
+			snake.add(new SnakeObject(new Point(comList.length / 2,
+					comList[0].length / 2), Direction.NORTH));
+			extendSnake();
+			extendSnake();
+
+			for (int x = 0; x < comList.length; x++) {
+				for (int y = 0; y < comList[x].length; y++) {
+					comList[x][y] = new JButton();
+				}
+			}
+			// End restarting the board state
+			
+			// Infinite loop to update board state
+			// ----------------------------------------------------------------------
+			while (true) {
+				System.out.println("While True");
+				long startTime = System.currentTimeMillis();
+				refresh();
+				long endTime = System.currentTimeMillis(); //166 milliseconds is 1/60 seconds, or 60Hz
+				try {
+					Thread.sleep(166 - (endTime - startTime));
+				} catch (InterruptedException e1) {
+					e1.printStackTrace();
+				}
+			}
+			// End infinite loop to update board state
+			// ----------------------------------------------------------------------
+		}
+		else{
+			System.exit(0);
+		}
 	}
 
 }
