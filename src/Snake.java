@@ -44,7 +44,7 @@ public class Snake {
 
 	ArrayList<SnakeObject> snake = new ArrayList<SnakeObject>();
 
-	Snake() {		
+	Snake() {
 
 		for (int x = 0; x < comList.length; x++) {
 			for (int y = 0; y < comList[x].length; y++) {
@@ -55,6 +55,12 @@ public class Snake {
 		}
 		System.out.println("comList set up");
 		
+		//test placeFood
+		for(int i=0; i<1000; i++){
+			placeFood();
+		}
+		
+
 		reset(true);
 		System.out.println("reset(true)");
 
@@ -150,9 +156,10 @@ public class Snake {
 
 		// frame settings
 		frame.setTitle("Max Nieberall's Snake Game v0.1.01 Beta"/*
-														 * TODO PUT VERSION
-														 * STUFF HERE
-														 */);
+																 * TODO PUT
+																 * VERSION STUFF
+																 * HERE
+																 */);
 
 		frame.setSize(750, 700);
 		frame.setResizable(true);
@@ -324,25 +331,47 @@ public class Snake {
 	 * (comList.length * comList[0].length)
 	 */
 	private void placeFood() {
-		int x = 0, y = 0, count = (int) (Math.random() * (comList.length * comList[0].length));
-		for (x = 0; count > 0; ++x) {
-			System.out.println("Random count: |" + count + "|");
-			if (x == 19) {
-				x = 0;
-				System.out.println("x=20");
-			} else {
-				for (y = 0; (y < 19) && (count > 0); ++y) {
-					System.out.println("for y: |" + y + "| x: |" + x + "|");
-					if (comList[x][y].getBackground() != Color.BLACK)//TODO Doesnt work - Food some times is on the snake
-						count--;
-				}
-			}
-		}
+		// Find random position
+		int x = (int) (Math.random() * (comList.length - 1)), y = (int) (Math
+				.random() * (comList[0].length - 1));
 
+		// find next empty position
+		boolean empty = true;
+		do {
+			do {
+				for (SnakeObject snk : snake) {
+					if (snk.getPoint().distance(x, y) == 0) {
+						System.out.println((char)27 + "[31mThis text would show up red" + (char)27 + "[0m");
+						System.out.println((char)27 + "distance"+snk.getPoint().distance(x,y)+ (char)27 + "[0m");
+						empty = false;
+					}
+				}
+				System.out.println("empty y: |" + y + "| x: |" + x
+						+ "|");
+				++y;
+			} while (y < 20 && !empty);
+			y=1;
+			++x;
+		} while (x < 20 && !empty);
+		x-=1;y-=1;
+		System.out.println("x "+x+" y "+y);
 		food.setLocation(x, y);
 		System.out.println("Food Placed: x:" + x + " y: " + y);
 		updateComList();
 
 	}
 
+	// for (x = 0; count > 0; ++x) {
+	// System.out.println("Random count: |" + count + "|");
+	// if (x == 19) {
+	// x = 0;
+	// System.out.println("x=20");
+	// } else {
+	// for (y = 0; (y < 19) && (count > 0); ++y) {
+	// System.out.println("for y: |" + y + "| x: |" + x + "|");
+	// count--;
+	// }
+	// }
+	// }
+	//
 }
