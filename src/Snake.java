@@ -16,6 +16,14 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
 
+/*Things to add:
+ * Menu:(Includes)
+ * 		About page
+ * 		Difficulty (speed)
+ * Highscores (Text file)
+ *  
+ */
+
 /**
  * @author( name= "Max Niebergall" date= "Febuary 19th 2015" )
  * @version v0.1.01 Beta
@@ -325,13 +333,13 @@ public class Snake {
 			} else {
 				for (y = 0; (y < 19) && (count > 0); ++y) {
 					System.out.println("for y: |" + y + "| x: |" + x + "|");
-					if (comList[x][y].getBackground() != Color.BLACK)
+					if (comList[x][y].getBackground() != Color.BLACK)//TODO Doesnt work - Food some times is on the snake
 						count--;
 				}
 			}
 		}
 
-		food.move(x, y);
+		food.setLocation(x, y);
 		System.out.println("Food Placed: x:" + x + " y: " + y);
 		updateComList();
 
