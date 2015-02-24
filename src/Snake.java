@@ -18,7 +18,7 @@ import javax.swing.KeyStroke;
 
 /**
  * @author( name= "Max Niebergall" date= "Febuary 19th 2015" )
- * @version v0.1.0 Beta
+ * @version v0.1.01 Beta
  * 
  * @link https://github.com/MaxNiebergall/Snake.git
  */
@@ -36,7 +36,7 @@ public class Snake {
 
 	ArrayList<SnakeObject> snake = new ArrayList<SnakeObject>();
 
-	Snake() {
+	Snake() {		
 
 		for (int x = 0; x < comList.length; x++) {
 			for (int y = 0; y < comList[x].length; y++) {
@@ -45,8 +45,8 @@ public class Snake {
 				comList[x][y].setMaximumSize(new Dimension(10, 10));
 			}
 		}
-		System.out.println("for");
-
+		System.out.println("comList set up");
+		
 		reset(true);
 		System.out.println("reset(true)");
 
@@ -141,7 +141,10 @@ public class Snake {
 		});
 
 		// frame settings
-		frame.setTitle("Max Nieberall's Snake v0.1.0 Beta"/* TODO PUT VERSION STUFF HERE */);
+		frame.setTitle("Max Nieberall's Snake Game v0.1.01 Beta"/*
+														 * TODO PUT VERSION
+														 * STUFF HERE
+														 */);
 
 		frame.setSize(750, 700);
 		frame.setResizable(true);
@@ -170,7 +173,8 @@ public class Snake {
 			comList[snk.getPoint().x][snk.getPoint().y]
 					.setBackground(Color.BLACK);
 		}
-		comList[(int) food.getX()][(int) food.getY()].setBackground(Color.GREEN);
+		comList[(int) food.getX()][(int) food.getY()]
+				.setBackground(Color.GREEN);
 	}
 
 	private boolean refresh() {
@@ -312,21 +316,22 @@ public class Snake {
 	 * (comList.length * comList[0].length)
 	 */
 	private void placeFood() {
-		int x = 0, y = 0, count = 0;
-		for (x = 0, count = (int) (Math.random() * (comList.length * comList[0].length)); count > 0; x++) {
+		int x = 0, y = 0, count = (int) (Math.random() * (comList.length * comList[0].length));
+		for (x = 0; count > 0; ++x) {
 			System.out.println("Random count: |" + count + "|");
-			if (x == 20) {
+			if (x == 19) {
 				x = 0;
 				System.out.println("x=20");
 			} else {
-				for (y = 0; y < 20 && count > 0; y++) {
+				for (y = 0; (y < 19) && (count > 0); ++y) {
 					System.out.println("for y: |" + y + "| x: |" + x + "|");
 					if (comList[x][y].getBackground() != Color.BLACK)
 						count--;
 				}
 			}
 		}
-		food.move(x-1, y-1); //It kept increasing x and y points by 1, so they are both reduced by 1. It could be caused by ++, or something.
+
+		food.move(x, y);
 		System.out.println("Food Placed: x:" + x + " y: " + y);
 		updateComList();
 
