@@ -10,6 +10,7 @@ import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -39,8 +40,11 @@ public class Snake{
 	// GUI Object Declarations
 	JFrame frame = new JFrame();
 	JPanel pane = new JPanel(new GridLayout(20, 20));
+	JPanel buttonPane = new JPanel();
 	Point food = new Point();
 	JLabel comList[][] = new JLabel[20][20];// X, Y
+	JComboBox dificulty = new JComboBox();
+	
 	
 	ArrayList<SnakeObject> snake = new ArrayList<SnakeObject>();
 	
@@ -142,6 +146,8 @@ public class Snake{
 		// END OF KEY BINDINGS
 		
 		// add it all up
+		dificulty.addItem("");//TODO add combobox stuffs
+		
 		for(int x = 0; x < comList.length; x++){
 			for(int y = 0; y < comList[x].length; y++){
 				pane.add(comList[y][x]);
