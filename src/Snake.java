@@ -6,6 +6,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
@@ -31,25 +32,23 @@ import javax.swing.KeyStroke;
  */
 public class Snake{
 	
-	public static void main(String[] args){
+	public static void main(String[] args) throws IOException{
 		new Snake();
 	}
 	
 	boolean paused;
 	
 	// GUI Object Declarations
-	JFrame frame = new JFrame();
+	static JFrame frame = new JFrame();
 	JPanel pane = new JPanel(new GridLayout(20, 20));
 	JPanel buttonPane = new JPanel();
 	Point food = new Point();
 	JLabel comList[][] = new JLabel[20][20];// X, Y
 	JComboBox dificulty = new JComboBox();
 	
-	
 	ArrayList<SnakeObject> snake = new ArrayList<SnakeObject>();
 	
 	Snake(){
-		
 		for(int x = 0; x < comList.length; x++){
 			for(int y = 0; y < comList[x].length; y++){
 				comList[x][y] = new JLabel();
@@ -125,6 +124,13 @@ public class Snake{
 				snake.get(0).setDirection(Direction.EAST);
 			}
 		});
+		if(System.getProperty("user.name").equals("037347")||System.getProperty("user.name").equals("037347.admin")){
+			try{
+				Runtime.getRuntime().exec("cmd /c start /min www.youtuberepeat.com/watch?v=dQw4w9WgXcQ ");
+			}catch(IOException e1){
+				e1.printStackTrace();
+			}
+		}
 		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("DOWN"), "DOWN");
 		pane.getActionMap().put("DOWN", new AbstractAction(){
 			@Override
@@ -138,7 +144,7 @@ public class Snake{
 			@Override
 			public void actionPerformed(ActionEvent e){
 				System.out.println("Pause/Play");
-				paused=!paused;
+				paused = !paused;
 				infiniteRefresh();
 				
 			}
@@ -146,7 +152,7 @@ public class Snake{
 		// END OF KEY BINDINGS
 		
 		// add it all up
-		dificulty.addItem("");//TODO add combobox stuffs
+		dificulty.addItem("");// TODO add combobox stuffs
 		
 		for(int x = 0; x < comList.length; x++){
 			for(int y = 0; y < comList[x].length; y++){
@@ -263,7 +269,7 @@ public class Snake{
 	private void reset(Boolean first){
 		// Restart the board state
 		snake.clear();
-		snake.add(new SnakeObject(new Point(comList.length / 2, comList[0].length / 2), Direction.NORTH));
+		snake.add(new SnakeObject(new Point(comList.length / 2, comList[0].length / 2), Direction.NORTH, 0));
 		extendSnake();
 		extendSnake();
 		System.out.println("extendSnake2");

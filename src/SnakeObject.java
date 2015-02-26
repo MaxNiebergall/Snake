@@ -1,4 +1,7 @@
+import java.awt.Color;
 import java.awt.Point;
+
+import javax.swing.ImageIcon;
 
 /**
  * @author { Max Niebergall Date: Febuary 20th, 2015 }
@@ -6,15 +9,26 @@ import java.awt.Point;
 public class SnakeObject {
 	private Direction direction;
 	private Point point;
+	private boolean useIcon;
+	private ImageIcon icon;
+	private int color;
 
 	/**
 	 * 
 	 * @param Point
 	 * @param Direction
+	 * @param Object (Color or ImageIcon)
 	 */
-	SnakeObject(Point point, Direction direction) {
+	SnakeObject(Point point, Direction direction, Object object) {
 		this.point = point;
 		this.direction = direction;
+		if(object instanceof Color){
+			useIcon=false;
+			color=((Color)object).getRGB();
+		}else{
+			useIcon = true;
+			icon=(ImageIcon)object;
+		}
 	}
 
 	/**
@@ -94,6 +108,28 @@ public class SnakeObject {
 		System.out.println(point);
 		System.out.println(this.direction);
 		System.out.println(this.direction());
+	}
+
+	public ImageIcon getIcon(){
+		return icon;
+	}
+
+	public void setIcon(ImageIcon icon){
+		this.icon = icon;
+		useIcon=true;
+	}
+
+	public int getColor(){
+		return color;
+	}
+
+	public void setColor(int color){
+		this.color = color;
+		useIcon = false;
+	}
+
+	public boolean isUseIcon(){
+		return useIcon;
 	}
 
 }
