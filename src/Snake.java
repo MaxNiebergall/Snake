@@ -6,10 +6,14 @@ import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javax.imageio.ImageIO;
 import javax.swing.AbstractAction;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -45,6 +49,7 @@ public class Snake{
 	Point food = new Point();
 	JLabel comList[][] = new JLabel[20][20];// X, Y
 	JComboBox dificulty = new JComboBox();
+	BufferedImage black = null, nikola = null;
 	
 	ArrayList<SnakeObject> snake = new ArrayList<SnakeObject>();
 	
@@ -59,11 +64,17 @@ public class Snake{
 		}
 		System.out.println("comList set up");
 		
-		// test placeFood
-		for(int i = 0; i < 1000; i++){
-			placeFood();
-		}
-		
+        try
+        {
+          black = ImageIO.read(new File("black.jpg"));
+          nikola = ImageIO.read(new File("nikola.jpg"));
+        }
+        catch (Exception e)
+        {
+          e.printStackTrace();
+          System.exit(1);
+        }	
+        
 		reset(true);
 		System.out.println("reset(true)");
 		
@@ -183,6 +194,15 @@ public class Snake{
 		// End GUI set up
 		// ---------------------------------------------------------------------
 		
+//		comList[0][0].setIcon(new ImageIcon(nikola));
+//		comList[0][1].setIcon(new ImageIcon(black));
+//		try{
+//			Thread.sleep(10000);
+//		}catch(InterruptedException e1){
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+//		
 		infiniteRefresh();
 	}
 	
@@ -200,7 +220,7 @@ public class Snake{
 		for(SnakeObject snk: snake){
 			System.out.println("Update comList snk: " + snk.getPoint());
 			if(snk.getPoint().getX() >= 0 && snk.getPoint().getY() >= 0 && snk.getPoint().getX() < comList.length && snk.getPoint().getY() < comList[0].length){
-				comList[snk.getPoint().x][snk.getPoint().y].setBackground(Color.BLACK);
+					comList[snk.getPoint().x][snk.getPoint().y].setIcon(snk.getIcon());
 			}
 			
 		}
@@ -269,8 +289,8 @@ public class Snake{
 	private void reset(Boolean first){
 		// Restart the board state
 		snake.clear();
-		snake.add(new SnakeObject(new Point(comList.length / 2, comList[0].length / 2), Direction.NORTH, 0));
-		extendSnake();
+		snake.add(new SnakeObject(new Point(comList.length / 2, comList[0].length / 2), Direction.NORTH, new ImageIcon(nikola)));
+		snake.add(new SnakeObject(new Point(comList.length / 2, comList[0].length / 2), Direction.NORTH, new ImageIcon(black)));
 		extendSnake();
 		System.out.println("extendSnake2");
 		placeFood();

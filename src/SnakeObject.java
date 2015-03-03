@@ -6,130 +6,97 @@ import javax.swing.ImageIcon;
 /**
  * @author { Max Niebergall Date: Febuary 20th, 2015 }
  */
-public class SnakeObject {
+public class SnakeObject{
 	private Direction direction;
 	private Point point;
-	private boolean useIcon;
 	private ImageIcon icon;
-	private int color;
-
+	
 	/**
 	 * 
 	 * @param Point
 	 * @param Direction
-	 * @param Object (Color or ImageIcon)
+	 * @param Object
+	 *            (Color or ImageIcon)
 	 */
-	SnakeObject(Point point, Direction direction, Object object) {
+	SnakeObject(Point point, Direction direction, ImageIcon imageIcon){
 		this.point = point;
 		this.direction = direction;
-		if(object instanceof Color){
-			useIcon=false;
-			color=((Color)object).getRGB();
-		}else{
-			useIcon = true;
-			icon=(ImageIcon)object;
-		}
+		icon = imageIcon;
+		
 	}
-
+	
 	/**
 	 * Extends the Snake
 	 * 
 	 * @param SnakeObject
 	 */
-	SnakeObject(SnakeObject other) {
-		this.point = new Point(
-				other.getPoint().x
-						- ((other.getDirection() == Direction.EAST || other.getDirection() == Direction.WEST) ? other.direction()
-								: 0),
-				other.getPoint().y
-						- ((other.getDirection() == Direction.NORTH || other
-								.getDirection() == Direction.SOUTH) ? other
-								.direction() : 0));// Subtracts direction to
+	SnakeObject(SnakeObject other){
+		this.point = new Point(other.getPoint().x - ((other.getDirection() == Direction.EAST || other.getDirection() == Direction.WEST) ? other.direction() : 0), other.getPoint().y - ((other.getDirection() == Direction.NORTH || other.getDirection() == Direction.SOUTH) ? other.direction() : 0));// Subtracts
+																																																																										// direction
+																																																																										// to
 		// extend the snake
 		this.direction = other.getDirection();
 	}
-
+	
 	/**
 	 * direction() returns the int value of the enum Direction
 	 * 
 	 * @return int NORTH +1, EAST +1, SOUTH -1, WEST -1, default 0
 	 */
-	public int direction() {// NORTH +, EAST +, SOUTH -, WEST -, default 0
+	public int direction(){// NORTH +, EAST +, SOUTH -, WEST -, default 0
 		// the last indicie is actually at the top left, so they all must be
 		// inverted
-		switch (direction) {
-		case NORTH:
-			return -1;
-
-		case SOUTH:
-			return 1;
-
-		case EAST:
-			return 1;
-
-		case WEST:
-			return -1;
-
-		default:
-			return 0;
+		switch(direction){
+			case NORTH:
+				return -1;
+				
+			case SOUTH:
+				return 1;
+				
+			case EAST:
+				return 1;
+				
+			case WEST:
+				return -1;
+				
+			default:
+				return 0;
 		}
-
+		
 	}
-
-	public Point getPoint() {
+	
+	public Point getPoint(){
 		return point;
 	}
-
-	public void setPoint(Point point) {
+	
+	public void setPoint(Point point){
 		this.point = point;
 	}
-
-	public Direction getDirection() {
+	
+	public Direction getDirection(){
 		return direction;
 	}
-
-	public void setDirection(Direction direction) {
+	
+	public void setDirection(Direction direction){
 		this.direction = direction;
 	}
-
-	public void forward() {// TODO add eating food to this method
-		this.point
-				.move(this.point.x
-						+ ((this.direction == Direction.EAST || this.direction == Direction.WEST) ? this
-								.direction() : 0),
-						this.point.y
-								+ ((this.direction == Direction.NORTH || this.direction == Direction.SOUTH) ? this
-										.direction() : 0));
+	
+	public void forward(){// TODO add eating food to this method
+		this.point.move(this.point.x + ((this.direction == Direction.EAST || this.direction == Direction.WEST) ? this.direction() : 0), this.point.y + ((this.direction == Direction.NORTH || this.direction == Direction.SOUTH) ? this.direction() : 0));
 		System.out.print("Direction Inline Operator: |");
-		System.out
-				.println(((this.direction == Direction.EAST || this.direction == Direction.WEST) ? this
-						.direction() : 0));
+		System.out.println(((this.direction == Direction.EAST || this.direction == Direction.WEST) ? this.direction() : 0));
 		System.out.println("Forward");
 		System.out.println(point);
 		System.out.println(this.direction);
 		System.out.println(this.direction());
 	}
-
+	
 	public ImageIcon getIcon(){
 		return icon;
 	}
-
+	
 	public void setIcon(ImageIcon icon){
-		this.icon = icon;
-		useIcon=true;
+		this.icon=icon;
 	}
-
-	public int getColor(){
-		return color;
-	}
-
-	public void setColor(int color){
-		this.color = color;
-		useIcon = false;
-	}
-
-	public boolean isUseIcon(){
-		return useIcon;
-	}
-
+	
 }
