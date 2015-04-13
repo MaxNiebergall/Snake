@@ -1,5 +1,6 @@
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.GridLayout;
@@ -12,6 +13,7 @@ import java.awt.event.WindowEvent;
 import java.util.ArrayList;
 
 import javax.swing.AbstractAction;
+import javax.swing.Icon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JComponent;
@@ -39,6 +41,7 @@ public class Snake{
 	}
 	
 	boolean paused;
+	int waitTime=166;
 	
 	// GUI Object Declarations
 	JFrame frame = new JFrame();
@@ -47,10 +50,10 @@ public class Snake{
 	Point food = new Point();
 	JLabel comList[][] = new JLabel[20][20];// X, Y
 	JPanel buttonPane = new JPanel();
-	JComboBox dificulty = new JComboBox();
+	JComboBox<String> dificulty = new JComboBox<String>();
 	JButton about = new JButton("About");
 	JButton highScores = new JButton("High Scores");
-	
+	JButton start = new JButton("Start");
 	
 	ArrayList<SnakeObject> snake = new ArrayList<SnakeObject>();
 	
@@ -155,21 +158,49 @@ public class Snake{
 		    	
 		    	
 		    }// end of action performed
-		});// end of sort
+		});// end of about
 		
-		about.addActionListener(new ActionListener() {
+		highScores.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
 		    	
 		    	
 		    }// end of action performed
-		});// end of sort
+		});// end of highScores
+		
+		dificulty.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	String level = (String) dificulty.getSelectedItem();
+		    	
+		    	if(level.equals("Level 1")){
+		    		waitTime=166;
+		    	}
+		    	else if(level.equals("Level 2")){
+		    		waitTime=100;
+		    	}
+		    	else if(level.equals("Level 4")){
+		    		waitTime=80;
+		    	}
+		    	
+		    	
+		    	
+		    }// end of action performed
+		});// end of dificulty
+		
+		start.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	reset(false);
+		    	
+		    }// end of action performed
+		});// end of start
 
 		
 		// add it all up		
 		buttonPane.setSize(new Dimension(300, 50));
 		playingFeildPane.setSize(new Dimension(300, 250));
 		about.setSize(new Dimension(30, 25));
-		highScores.setFont(new Font());//FIXME NOWWWWWW
+		highScores.setFont(new Font("Arial Black",0,11));
+		about.setFont(new Font("Arial Black",0,11));
+		start.setFont(new Font("Arial Black",0,11));
 		
 		dificulty.addItem("Level 1");
 		dificulty.addItem("Level 2");
@@ -177,6 +208,7 @@ public class Snake{
 		
 		buttonPane.add(about);
 		buttonPane.add(highScores);
+		buttonPane.add(start);
 		buttonPane.add(dificulty);
 		
 		basePane.add(buttonPane, BorderLayout.NORTH);
@@ -203,7 +235,7 @@ public class Snake{
 																 * STUFF HERE
 																 */);
 		
-		frame.setSize(250, 300);
+		frame.setSize(450, 500);
 		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
@@ -219,7 +251,7 @@ public class Snake{
 		snake.add(new SnakeObject(snake.get(snake.size() - 1)));
 	}
 	
-	private void updateComList(){
+	private void updateComList(){	
 		System.out.println("updateComList");
 		for(int x = 0; x < comList.length; x++){
 			for(int y = 0; y < comList[x].length; y++){
@@ -279,12 +311,16 @@ public class Snake{
 	}
 	
 	private void youLose(){
-		int option = JOptionPane.showConfirmDialog(playingFeildPane, "You Lose :-(\nwould you like to play again?");
+		int option = JOptionPane.showOptionDialog((Component) basePane, (Object)"You Lose :-(\nwould you like to play again?", "You Lose", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.INFORMATION_MESSAGE, (Icon) null, (Object[]) new String[]{"Yes", "No", "Close Game"}, (Object) null);
 		if(option == JOptionPane.YES_OPTION){
 			reset(false);
 			
-		}else{
+		}else if(option == JOptionPane.NO_OPTION){
+			return;
+			
+		}else if(option == JOptionPane.CANCEL_OPTION){
 			System.exit(0);
+			
 		}
 	}
 	
@@ -319,10 +355,10 @@ public class Snake{
 			System.out.println("While refresh");
 			long startTime = System.currentTimeMillis();
 			refresh = refresh();
-			long endTime = System.currentTimeMillis(); // 166 milliseconds is
-														// 1/60 seconds, or 60Hz
+			long endTime = System.currentTimeMillis(); 
+														
 			try{
-				Thread.sleep((166 - (endTime - startTime) > 0) ? 166 - (endTime - startTime) : 0);
+				Thread.sleep((waitTime - (endTime - startTime) > 0) ? waitTime - (endTime - startTime) : 0);
 			}catch(InterruptedException e1){
 				e1.printStackTrace();
 			}
