@@ -1,8 +1,11 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.GridLayout;
 import java.awt.Point;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
@@ -39,11 +42,14 @@ public class Snake{
 	
 	// GUI Object Declarations
 	JFrame frame = new JFrame();
-	JPanel pane = new JPanel(new GridLayout(20, 20));
-	JPanel buttonPane = new JPanel();
+	JPanel basePane = new JPanel(new BorderLayout());
+	JPanel playingFeildPane = new JPanel(new GridLayout(20, 20));
 	Point food = new Point();
 	JLabel comList[][] = new JLabel[20][20];// X, Y
+	JPanel buttonPane = new JPanel();
 	JComboBox dificulty = new JComboBox();
+	JButton about = new JButton("About");
+	JButton highScores = new JButton("High Scores");
 	
 	
 	ArrayList<SnakeObject> snake = new ArrayList<SnakeObject>();
@@ -53,8 +59,7 @@ public class Snake{
 		for(int x = 0; x < comList.length; x++){
 			for(int y = 0; y < comList[x].length; y++){
 				comList[x][y] = new JLabel();
-				comList[x][y].setMinimumSize(new Dimension(10, 10));
-				comList[x][y].setMaximumSize(new Dimension(10, 10));
+				comList[x][y].setPreferredSize(new Dimension(5, 5));
 				comList[x][y].setOpaque(true);
 			}
 		}
@@ -69,72 +74,72 @@ public class Snake{
 		System.out.println("reset(true)");
 		
 		// HERE ARE THE KEY BINDINGS
-		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0), "up");
-		pane.getActionMap().put("up", new AbstractAction(){
+		playingFeildPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_W, 0), "up");
+		playingFeildPane.getActionMap().put("up", new AbstractAction(){
 			@Override
 			public void actionPerformed(ActionEvent e){
 				System.out.println("Up");
 				snake.get(0).setDirection(Direction.NORTH);
 			}
 		});
-		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_A, 0), "left");
-		pane.getActionMap().put("left", new AbstractAction(){
+		playingFeildPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_A, 0), "left");
+		playingFeildPane.getActionMap().put("left", new AbstractAction(){
 			@Override
 			public void actionPerformed(ActionEvent e){
 				System.out.println("Left");
 				snake.get(0).setDirection(Direction.WEST);
 			}
 		});
-		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0), "right");
-		pane.getActionMap().put("right", new AbstractAction(){
+		playingFeildPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_D, 0), "right");
+		playingFeildPane.getActionMap().put("right", new AbstractAction(){
 			@Override
 			public void actionPerformed(ActionEvent e){
 				System.out.println("Right");
 				snake.get(0).setDirection(Direction.EAST);
 			}
 		});
-		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0), "down");
-		pane.getActionMap().put("down", new AbstractAction(){
+		playingFeildPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_S, 0), "down");
+		playingFeildPane.getActionMap().put("down", new AbstractAction(){
 			@Override
 			public void actionPerformed(ActionEvent e){
 				System.out.println("Down");
 				snake.get(0).setDirection(Direction.SOUTH);
 			}
 		});
-		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("UP"), "UP");
-		pane.getActionMap().put("UP", new AbstractAction(){
+		playingFeildPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("UP"), "UP");
+		playingFeildPane.getActionMap().put("UP", new AbstractAction(){
 			@Override
 			public void actionPerformed(ActionEvent e){
 				System.out.println("Up-arrow");
 				snake.get(0).setDirection(Direction.NORTH);
 			}
 		});
-		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("LEFT"), "LEFT");
-		pane.getActionMap().put("LEFT", new AbstractAction(){
+		playingFeildPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("LEFT"), "LEFT");
+		playingFeildPane.getActionMap().put("LEFT", new AbstractAction(){
 			@Override
 			public void actionPerformed(ActionEvent e){
 				System.out.println("Left-arrow");
 				snake.get(0).setDirection(Direction.WEST);
 			}
 		});
-		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("RIGHT"), "RIGHT");
-		pane.getActionMap().put("RIGHT", new AbstractAction(){
+		playingFeildPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("RIGHT"), "RIGHT");
+		playingFeildPane.getActionMap().put("RIGHT", new AbstractAction(){
 			@Override
 			public void actionPerformed(ActionEvent e){
 				System.out.println("Right-arrow");
 				snake.get(0).setDirection(Direction.EAST);
 			}
 		});
-		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("DOWN"), "DOWN");
-		pane.getActionMap().put("DOWN", new AbstractAction(){
+		playingFeildPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke("DOWN"), "DOWN");
+		playingFeildPane.getActionMap().put("DOWN", new AbstractAction(){
 			@Override
 			public void actionPerformed(ActionEvent e){
 				System.out.println("Down-arrow");
 				snake.get(0).setDirection(Direction.SOUTH);
 			}
 		});
-		pane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_P, 0), "pause");
-		pane.getActionMap().put("pause", new AbstractAction(){
+		playingFeildPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW).put(KeyStroke.getKeyStroke(KeyEvent.VK_P, 0), "pause");
+		playingFeildPane.getActionMap().put("pause", new AbstractAction(){
 			@Override
 			public void actionPerformed(ActionEvent e){
 				System.out.println("Pause/Play");
@@ -145,15 +150,45 @@ public class Snake{
 		});
 		// END OF KEY BINDINGS
 		
-		// add it all up
-		dificulty.addItem("");//TODO add combobox stuffs
+		about.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	
+		    	
+		    }// end of action performed
+		});// end of sort
+		
+		about.addActionListener(new ActionListener() {
+		    public void actionPerformed(ActionEvent e) {
+		    	
+		    	
+		    }// end of action performed
+		});// end of sort
+
+		
+		// add it all up		
+		buttonPane.setSize(new Dimension(300, 50));
+		playingFeildPane.setSize(new Dimension(300, 250));
+		about.setSize(new Dimension(30, 25));
+		highScores.setFont(new Font());//FIXME NOWWWWWW
+		
+		dificulty.addItem("Level 1");
+		dificulty.addItem("Level 2");
+		dificulty.addItem("Level 4");
+		
+		buttonPane.add(about);
+		buttonPane.add(highScores);
+		buttonPane.add(dificulty);
+		
+		basePane.add(buttonPane, BorderLayout.NORTH);
+		basePane.add(playingFeildPane, BorderLayout.CENTER);
+		
 		
 		for(int x = 0; x < comList.length; x++){
 			for(int y = 0; y < comList[x].length; y++){
-				pane.add(comList[y][x]);
+				playingFeildPane.add(comList[y][x]);
 			}
 		}
-		frame.add(pane);
+		frame.add(basePane);
 		
 		// frame window closer
 		frame.addWindowListener(new WindowAdapter(){
@@ -168,8 +203,8 @@ public class Snake{
 																 * STUFF HERE
 																 */);
 		
-		frame.setSize(750, 700);
-		frame.setResizable(true);
+		frame.setSize(250, 300);
+		frame.setResizable(false);
 		frame.setLocationRelativeTo(null);
 		frame.setVisible(true);
 		frame.validate();
@@ -244,7 +279,7 @@ public class Snake{
 	}
 	
 	private void youLose(){
-		int option = JOptionPane.showConfirmDialog(pane, "You Lose :-(\nwould you like to play again?");
+		int option = JOptionPane.showConfirmDialog(playingFeildPane, "You Lose :-(\nwould you like to play again?");
 		if(option == JOptionPane.YES_OPTION){
 			reset(false);
 			
