@@ -1,0 +1,6 @@
+Max
+10
+Michael
+30
+Sam
+20

@@ -10,7 +10,14 @@ import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedWriter;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.Scanner;
 
 import javax.swing.AbstractAction;
 import javax.swing.Icon;
@@ -19,9 +26,12 @@ import javax.swing.JComboBox;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.KeyStroke;
+import javax.swing.ListModel;
+import javax.swing.ListSelectionModel;
 
 /*
  * Things to add: Menu:(Includes) About page Difficulty (speed) Highscores (Text
@@ -162,7 +172,64 @@ public class Snake{
 		
 		highScores.addActionListener(new ActionListener() {
 		    public void actionPerformed(ActionEvent e) {
+		    	LinkedList<String> names = new LinkedList();
+		    	LinkedList<Integer> scores = new LinkedList();
 		    	
+		    	try {
+					Scanner fsc = new Scanner(new FileReader("highScores.txt"));
+			    	while(fsc.hasNextLine()&&fsc.hasNextInt()){
+			    		names.add(fsc.nextLine());
+			    		scores.add(Integer.parseInt(fsc.nextLine()));
+			    	}
+			    	fsc.close();
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}		    	
+		    	
+		    	frame.setVisible(false);
+		    	
+		    	final JFrame highScoreFrame = new JFrame();
+		    	JButton goBack = new JButton("Go Back");
+		    	JPanel highScorePane = new JPanel(new BorderLayout());
+		    	JList nameList = new JList(names.toArray());
+		    	JList scoreList = new JList(scores.toArray());
+		    	
+		    	nameList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		    	nameList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		    	nameList.setVisibleRowCount(10);
+		    	scoreList.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		    	scoreList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
+		    	scoreList.setVisibleRowCount(10);
+		    	
+		    	highScorePane.add(goBack, BorderLayout.NORTH);
+		    	highScorePane.add(nameList, BorderLayout.EAST);
+		    	highScorePane.add(scoreList, BorderLayout.WEST);
+		    	
+		    	highScoreFrame.add(highScorePane);
+		    	highScoreFrame.setSize(450, 500);
+		    	highScoreFrame.setLocationRelativeTo(null);
+		    	highScoreFrame.setVisible(true);
+		    	
+		    	
+		    	goBack.addActionListener(new ActionListener() {
+				    public void actionPerformed(ActionEvent e) {
+				    	highScoreFrame.setVisible(false);
+				    	frame.setVisible(true);
+				    }// end of action performed
+				});// end of about
+		    	
+		    	
+		    	
+		    	try {
+					BufferedWriter bfw = new BufferedWriter(new FileWriter("highScores.txt"));
+					while(!names.isEmpty()){
+						bfw.write(names.removeFirst());
+						bfw.write(scores.removeFirst());
+					}
+					bfw.close();
+				} catch (IOException e1) {
+					e1.printStackTrace();
+				}
 		    	
 		    }// end of action performed
 		});// end of highScores
@@ -195,9 +262,9 @@ public class Snake{
 
 		
 		// add it all up		
-		buttonPane.setSize(new Dimension(300, 50));
-		playingFeildPane.setSize(new Dimension(300, 250));
-		about.setSize(new Dimension(30, 25));
+		buttonPane.setSize(300, 50);
+		playingFeildPane.setSize(300, 250);
+		about.setSize(30, 25);
 		highScores.setFont(new Font("Arial Black",0,11));
 		about.setFont(new Font("Arial Black",0,11));
 		start.setFont(new Font("Arial Black",0,11));
